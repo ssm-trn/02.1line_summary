@@ -29,8 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setLoading(true);
         
         try {
-            // バックエンドAPIを呼び出し
-            const response = await fetch('/api/summarize', {
+            // バックエンドAPIを呼び出し（本番環境では適切なURLに変更してください）
+            const apiUrl = window.location.hostname === 'localhost' ? '/api/summarize' : 'https://your-backend-url.herokuapp.com/api/summarize';
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
