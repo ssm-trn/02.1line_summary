@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # URL要約アプリ
 
 Google Gemini APIを使用して、Webページの内容を1文で要約するWebアプリケーションです。
@@ -55,3 +56,7 @@ npm start
 ## ライセンス
 
 MIT License
+=======
+# 02.1line_summary
+02.1line_summary
+>>>>>>> 9f3b5eb68749480ca6430289c9cea4c49d70db0e
