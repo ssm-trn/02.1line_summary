@@ -2,6 +2,10 @@
   "version": 2,
   "builds": [
     {
+      "src": "api/next-cors.js",
+      "use": "@vercel/node"
+    },
+    {
       "src": "api/cors-handler.js",
       "use": "@vercel/node"
     },
@@ -15,6 +19,7 @@
     }
   ],
   "routes": [
+    { "src": "/api/next-cors", "dest": "/api/next-cors" },
     { "src": "/api/cors-handler", "dest": "/api/cors-handler" },
     { "src": "/api/vercel-cors", "dest": "/api/vercel-cors" },
     { "src": "/api/summarize", "dest": "/api/summarize" }
