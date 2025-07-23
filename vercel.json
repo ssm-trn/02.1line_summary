@@ -2,29 +2,21 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/*.js",
+      "src": "api/cors-handler.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/vercel-cors.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/summarize.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Credentials", "value": "true" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-        { "key": "Access-Control-Allow-Headers", "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" }
-      ]
-    }
+    { "src": "/api/cors-handler", "dest": "/api/cors-handler" },
+    { "src": "/api/vercel-cors", "dest": "/api/vercel-cors" },
+    { "src": "/api/summarize", "dest": "/api/summarize" }
   ]
 }
