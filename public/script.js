@@ -29,9 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setLoading(true);
         
         try {
-            // バックエンドAPIを呼び出し
-            const apiUrl = 'https://02-1line-summary-5mvqf5hn5-ssm-trns-projects.vercel.app/api/next-cors';
-            const response = await fetch(apiUrl, {
+            // バックエンドAPIを呼び出し（GETパラメータでURLを送信）
+            const apiUrl = 'https://02-1line-summary-5mvqf5hn5-ssm-trns-projects.vercel.app/api/vercel-cors-fixed';
+            const response = await fetch(`${apiUrl}?url=${encodeURIComponent(url)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
