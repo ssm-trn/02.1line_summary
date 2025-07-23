@@ -29,9 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
         setLoading(true);
         
         try {
-            // バックエンドAPIを呼び出し（本番環境では適切なURLに変更してください）
-            const apiUrl = window.location.hostname === 'localhost' ? '/api/summarize' : 'https://your-backend-url.herokuapp.com/api/summarize';
+            // バックエンドAPIを呼び出し
+            const apiUrl = 'https://02-1line-summary-5mvqf5hn5-ssm-trns-projects.vercel.app/api/summarize';
             const response = await fetch(apiUrl, {
+              mode: 'cors',
+              credentials: 'include',
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

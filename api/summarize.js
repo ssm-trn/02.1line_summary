@@ -9,9 +9,10 @@ const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GE
 // CORS headers
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
   'Access-Control-Max-Age': '86400', // 24 hours
+  'Access-Control-Allow-Credentials': 'true',
 };
 
 // Handle preflight requests
@@ -24,15 +25,15 @@ const handleOptions = (req, res) => {
 };
 
 module.exports = async (req, res) => {
-  // Handle OPTIONS method
-  if (req.method === 'OPTIONS') {
-    return handleOptions(req, res);
-  }
-
   // Set CORS headers for all responses
   Object.entries(corsHeaders).forEach(([key, value]) => {
     res.setHeader(key, value);
   });
+
+  // Handle OPTIONS method
+  if (req.method === 'OPTIONS') {
+    return handleOptions(req, res);
+  }
 
   // Only allow POST requests for the main endpoint
   if (req.method !== 'POST') {
