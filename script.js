@@ -30,8 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         try {
             // バックエンドAPIを呼び出し
-            const apiUrl = 'https://02-1line-summary-5mvqf5hn5-ssm-trns-projects.vercel.app/api/proxy';
+            const apiUrl = 'https://02-1line-summary-5mvqf5hn5-ssm-trns-projects.vercel.app/api/cors-proxy';
             const response = await fetch(apiUrl, {
+              mode: 'cors',
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
