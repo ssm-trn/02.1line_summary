@@ -312,7 +312,12 @@ ${cleanContent}
       const summary = responseData.candidates?.[0]?.content?.parts?.[0]?.text || '要約を生成できませんでした。';
       console.log('Summary generated successfully');
       
-      res.json({ summary });
+      // 常に同じ形式でレスポンスを返す
+      res.json({
+        success: true,
+        summary: summary,
+        timestamp: new Date().toISOString()
+      });
       
     } catch (apiError) {
       console.error('Gemini API error:', apiError);

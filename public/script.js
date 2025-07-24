@@ -70,7 +70,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // 結果を表示
-            showSummary(data.summary);
+            if (typeof data === 'string') {
+                // 文字列の場合はそのまま表示
+                showSummary(data);
+            } else if (data.summary) {
+                // オブジェクトでsummaryプロパティがある場合
+                showSummary(data.summary);
+            } else {
+                // その他の場合はJSON文字列として表示
+                showSummary(JSON.stringify(data, null, 2));
+            }
             
         } catch (error) {
             console.error('Error:', error);
