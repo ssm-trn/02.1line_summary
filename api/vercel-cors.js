@@ -6,12 +6,16 @@ const axios = require('axios');
 // Initialize Google Gemini
 const genAI = process.env.GEMINI_API_KEY ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY) : null;
 
-const allowCors = fn => async (req, res) => {
-  // Set CORS headers
+const setCorsHeaders = (res) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+};
+
+const allowCors = (fn) => async (req, res) => {
+  // Set CORS headers
+  setCorsHeaders(res);
 
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
@@ -21,14 +25,15 @@ const allowCors = fn => async (req, res) => {
 
   // For non-OPTIONS requests, call the handler
   try {
-    const result = await fn(req, res);
-    return result;
+    return await fn(req, res);
   } catch (error) {
     console.error('Error in allowCors wrapper:', error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Internal Server Error' })
-    };
+    setCorsHeaders(res);
+    res.status(500).json({ 
+      error: 'Internal Server Error',
+      message: error.message 
+    });
+    return { statusCode: 500 };
   }
 };
 

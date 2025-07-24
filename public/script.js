@@ -29,25 +29,43 @@ document.addEventListener('DOMContentLoaded', () => {
         setLoading(true);
         
         try {
-            // バックエンドAPIを呼び出し（GETパラメータでURLを送信）
-            const apiUrl = 'https://02-1line-summary-5mvqf5hn5-ssm-trns-projects.vercel.app/api/cors-proxy';
-            const response = await fetch(`${apiUrl}?url=${encodeURIComponent(url)}`, {
+            // 1. CORSプロキシを通じてURLのコンテンツを取得
+            const proxyUrl = '/api/cors-proxy';
+            const fullUrl = `${proxyUrl}?url=${encodeURIComponent(url)}`;
+            console.log('Fetching URL:', fullUrl);
+            
+            const proxyResponse = await fetch(fullUrl, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            console.log('Proxy response status:', proxyResponse.status);
+            const proxyData = await proxyResponse.json();
+            
+            if (!proxyResponse.ok) {
+                throw new Error(proxyData.error || 'コンテンツの取得に失敗しました');
+            }
+            
+            // 2. 取得したHTMLを要約APIに送信
+            const summarizeUrl = '/api/summarize';
+            console.log('Sending to summarize API...');
+            
+            const summarizeResponse = await fetch(summarizeUrl, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ url })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    url: url,
+                    content: proxyData.data // CORSプロキシから返されたHTMLコンテンツ
+                })
             });
             
-            const data = await response.json().catch(e => {
-                console.error('Failed to parse JSON response:', e);
-                throw new Error('サーバーからの応答が不正です');
-            });
+            console.log('Summarize response status:', summarizeResponse.status);
+            const data = await summarizeResponse.json();
             
-            if (!response.ok) {
-                const errorMessage = data.error || data.message || '要約の生成中にエラーが発生しました';
+            if (!summarizeResponse.ok) {
+                const errorMessage = data.error || data.message || '要約の生成に失敗しました';
                 const errorDetails = data.details || data.stack || '';
-                console.error('Server error response:', { status: response.status, data });
+                console.error('Server error response:', { status: summarizeResponse.status, data });
                 throw new Error(`${errorMessage}${errorDetails ? `\n\n詳細: ${errorDetails}` : ''}`);
             }
             

@@ -2,31 +2,21 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/vercel-cors-fixed.js",
+      "src": "api/**/*.js",
       "use": "@vercel/node"
     },
     {
-      "src": "api/next-cors.js",
-      "use": "@vercel/node"
+      "src": "index.html",
+      "use": "@vercel/static"
     },
     {
-      "src": "api/cors-handler.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "api/vercel-cors.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "api/summarize.js",
-      "use": "@vercel/node"
+      "src": "public/**/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    { "src": "/api/vercel-cors-fixed", "dest": "/api/vercel-cors-fixed" },
-    { "src": "/api/next-cors", "dest": "/api/next-cors" },
-    { "src": "/api/cors-handler", "dest": "/api/cors-handler" },
-    { "src": "/api/vercel-cors", "dest": "/api/vercel-cors" },
-    { "src": "/api/summarize", "dest": "/api/summarize" }
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/public/(.*)", "dest": "/public/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }

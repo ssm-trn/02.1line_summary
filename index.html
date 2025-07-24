@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL要約アプリ</title>
+    <link rel="stylesheet" href="public/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>URL要約アプリ</h1>
+            <p>URLを入力すると、Webページの内容を1文で要約します</p>
+        </header>
+        
+        <main>
+            <form id="summaryForm">
+                <div class="input-group">
+                    <input 
+                        type="url" 
+                        id="urlInput" 
+                        placeholder="https://example.com" 
+                        required
+                    >
+                    <button type="submit" id="summarizeBtn">要約する</button>
+                </div>
+            </form>
+            
+            <div class="result" id="result">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>要約中...</p>
+                </div>
+                <div class="summary" id="summary"></div>
+                <div class="error" id="error"></div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2025 URL要約アプリ - Powered by Google Gemini API</p>
+        </footer>
+    </div>
+    
+    <script src="/public/script.js"></script>
+</body>
+</html>
