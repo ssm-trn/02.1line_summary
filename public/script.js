@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 環境に応じたAPIのベースURLを設定
+    const API_BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
     const urlInput = document.getElementById('urlInput');
     const summarizeBtn = document.getElementById('summarizeBtn');
     const loadingElement = document.getElementById('loading');
@@ -30,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         try {
             // 1. CORSプロキシを通じてURLのコンテンツを取得
-            const proxyUrl = '/api/cors-proxy';
+            const proxyUrl = `${API_BASE_URL}/api/cors-proxy`;
             const fullUrl = `${proxyUrl}?url=${encodeURIComponent(url)}`;
             console.log('Fetching URL:', fullUrl);
             
@@ -41,13 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log('Proxy response status:', proxyResponse.status);
             const proxyData = await proxyResponse.json();
+            console.log('Proxy response data:', proxyData);
             
-            if (!proxyResponse.ok) {
-                throw new Error(proxyData.error || 'コンテンツの取得に失敗しました');
+            if (!proxyResponse.ok || !proxyData.success) {
+                const errorMessage = proxyData.error || proxyData.message || 'コンテンツの取得に失敗しました';
+                throw new Error(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage);
             }
             
             // 2. 取得したHTMLを要約APIに送信
-            const summarizeUrl = '/api/summarize';
+            const summarizeUrl = `${API_BASE_URL}/api/summarize`;
             console.log('Sending to summarize API...');
             
             const summarizeResponse = await fetch(summarizeUrl, {
@@ -83,7 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
         } catch (error) {
             console.error('Error:', error);
-            showError(error.message || 'エラーが発生しました。しばらくしてからもう一度お試しください。');
+            // エラーメッセージがオブジェクトの場合は文字列に変換
+            const errorMessage = error.message || 'エラーが発生しました。しばらくしてからもう一度お試しください。';
+            showError(errorMessage);
         } finally {
             setLoading(false);
         }
