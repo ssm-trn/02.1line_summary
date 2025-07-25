@@ -28,17 +28,5 @@
     "gh-pages": "^6.3.0",
     "nodemon": "^3.0.1",
     "vercel": "^44.5.0"
-  },
-  "vercel": {
-    "rewrites": [
-      {
-        "source": "/api/(.*)",
-        "destination": "/api/$1"
-      },
-      {
-        "source": "/(.*)",
-        "destination": "/index.html"
-      }
-    ]
   }
 }
