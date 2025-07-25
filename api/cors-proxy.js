@@ -1,5 +1,4 @@
-import axios from 'axios';
-
+// Simple CORS proxy for Vercel Serverless Functions
 export default async function handler(req, res) {
   // CORSヘッダーを設定
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -24,20 +23,19 @@ export default async function handler(req, res) {
 
     console.log(`[CORS Proxy] Fetching URL: ${url}`);
     
-    const response = await axios.get(url, {
+    const response = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
       },
-      timeout: 10000,
-      responseType: 'text',
-      validateStatus: null // すべてのステータスコードを有効にする
+      timeout: 10000
     });
 
+    const data = await response.text();
     console.log(`[CORS Proxy] Response status: ${response.status}`);
     
     // レスポンスをそのまま返す
-    res.status(response.status).send(response.data);
+    res.status(response.status).send(data);
   } catch (error) {
     console.error('[CORS Proxy] Error:', error);
     
