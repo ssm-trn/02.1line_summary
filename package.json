@@ -9,10 +9,9 @@
   "scripts": {
     "start": "node server.cjs",
     "dev": "nodemon server.cjs",
-    "build": "node scripts/build.js",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d public",
-    "vercel-build": "npm run build"
+    "build-local": "node scripts/build.js",
+    "predeploy": "npm run build-local",
+    "deploy": "gh-pages -d public"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
