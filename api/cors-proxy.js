@@ -1,9 +1,12 @@
+const fetch = require('node-fetch');
+
 // Simple CORS proxy for Vercel Serverless Functions
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // CORSヘッダーを設定
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Content-Type', 'application/json');
   
   // CORSプリフライトリクエスト（OPTIONS）に対応
   if (req.method === 'OPTIONS') {
@@ -34,8 +37,15 @@ export default async function handler(req, res) {
     const data = await response.text();
     console.log(`[CORS Proxy] Response status: ${response.status}`);
     
-    // レスポンスをそのまま返す
-    res.status(response.status).send(data);
+    // JSON形式でレスポンスを返す
+    res.status(200).json({
+      success: true,
+      status: response.status,
+      data: data,
+      headers: {
+        'content-type': response.headers.get('content-type')
+      }
+    });
   } catch (error) {
     console.error('[CORS Proxy] Error:', error);
     

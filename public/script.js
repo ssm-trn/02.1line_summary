@@ -38,16 +38,23 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const proxyResponse = await fetch(fullUrl, {
                 method: 'GET',
-                headers: { 'Accept': 'application/json' }
+                headers: { 
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
             });
             
             console.log('Proxy response status:', proxyResponse.status);
             const proxyData = await proxyResponse.json();
-            console.log('Proxy response data:', proxyData);
+            console.log('Proxy response data received');
             
-            if (!proxyResponse.ok || !proxyData.success) {
-                const errorMessage = proxyData.error || proxyData.message || 'コンテンツの取得に失敗しました';
-                throw new Error(typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage);
+            if (!proxyData.success) {
+                const errorMessage = proxyData.error || 'コンテンツの取得に失敗しました';
+                throw new Error(errorMessage);
+            }
+            
+            if (!proxyData.data) {
+                throw new Error('コンテンツが空です');
             }
             
             // 2. 取得したHTMLを要約APIに送信
